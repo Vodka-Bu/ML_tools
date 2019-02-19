@@ -14,15 +14,8 @@ from sklearn.base import BaseEstimator,ClassifierMixin
 logger = logging.getLogger(__name__)
 
 
-from .knn import KNN
 
 
-
-
-
-__all__ = [
-    'KNN'
-]
 
 
 class ClassifierEstimator(BaseEstimator,ClassifierMixin):
@@ -66,11 +59,13 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
             self.X = self.X.reshape(self.n_samples, self.n_features)
             logger.warning('X 可能是单变量，已经自动转置')
         self._fit()
+        return self
 
 
     def predict(self, test_data = None):
         '''
         当 test_data 是 None 的时候，将 X 赋予 test_data
+        test_data 是相互独立的，所以可以在本层直接循环得到 test_result
         :param test_data: array-like, 会检查一下格式是否准确
         '''
         if test_data is None:
@@ -88,12 +83,28 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
                 logger.warning('X 可能是单变量，已经自动转置')
                 if self.n_features != self.n_test_features:
                     raise ValueError('测试数据特征数量与训练数据集不一致')
-        self._predict()
+
+        self.test_result_list = []
+        for i in range(self.n_test_samples):
+            self.test_result_list.append(self._predict(self.test_data[i, :]))
+        self.test_result = self.to_array(self.test_result_list)
+        return self.test_result
 
 
     def _fit(self):
         logger.info('该方法还未配置_fit方法')
 
 
-    def _predict(self):
+    def _predict(self, x):
         logger.info('该方法还未配置_predict方法')
+        self.test_result = None
+
+
+
+from .knn import KNN
+
+
+__all__ = [
+    'ClassifierEstimator',
+    'KNN'
+]
