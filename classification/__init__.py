@@ -45,8 +45,6 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
         曾考虑要不要用装饰器的方法实现，感觉应该没有这种方式方便
         :param X: array-like， n_samples * n_features， 如果是单变量，期望是 n * 1 的结构
         :param y: array-like， n_samples，这里的y暂时限定只能是符合模型要求的数字，不可以是label
-
-        注意这里不 return self，return 的动作在下一层做
         '''
         self.X = self.to_array(X)
         self.y = self.to_array(y)
@@ -62,17 +60,16 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
         return self
 
 
-    def predict(self, test_data = None):
+    def predict(self, X = None):
         '''
         当 test_data 是 None 的时候，将 X 赋予 test_data
-        test_data 是相互独立的，所以可以在本层直接循环得到 test_result
         :param test_data: array-like, 会检查一下格式是否准确
         '''
-        if test_data is None:
+        if X is None:
             self.test_data = self.X
         else:
             # 需要判断一下数据格式是否准确
-            self.test_data = self.to_array(test_data)
+            self.test_data = self.to_array(X)
             try:
                 self.n_test_samples, self.n_test_features = self.test_data.shape
             except ValueError:
@@ -83,20 +80,16 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
                 logger.warning('X 可能是单变量，已经自动转置')
                 if self.n_features != self.n_test_features:
                     raise ValueError('测试数据特征数量与训练数据集不一致')
-
-        self.test_result_list = []
-        for i in range(self.n_test_samples):
-            self.test_result_list.append(self._predict(self.test_data[i, :]))
-        self.test_result = self.to_array(self.test_result_list)
+        self.test_result = self._predict()
         return self.test_result
 
 
     def _fit(self):
-        logger.info('该方法还未配置_fit方法')
+        logger.info('该对象还未配置_fit方法')
 
 
-    def _predict(self, x):
-        logger.info('该方法还未配置_predict方法')
+    def _predict(self):
+        logger.info('该对象还未配置_predict方法')
         self.test_result = None
 
 

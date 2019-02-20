@@ -80,7 +80,22 @@ class KNN(ClassifierEstimator):
         self.X_mat = np.mat(self.X)
 
 
-    def _predict(self, x):
+
+    def _predict(self):
+        '''
+        knn 预测函数
+        因为knn 的预测是单个样本独立预测，无法通过矩阵的形式统一处理，因此采用单循环的方式
+        :return: 最终结果
+        '''
+
+        self.test_result_list = []
+        for i in range(self.n_test_samples):
+            self.test_result_list.append(self.__predict(self.test_data[i, :]))
+        return self.to_array(self.test_result_list)
+
+
+
+    def __predict(self, x):
         '''
         knn 预测函数
         不需要全排序
