@@ -6,11 +6,10 @@ knn 学习器
 '''
 
 import logging
-import operator
 import numpy as np
 from . import ClassifierEstimator
 
-logger = logging.getLogger(__name__)
+
 
 class KNN(ClassifierEstimator):
     '''
@@ -21,7 +20,6 @@ class KNN(ClassifierEstimator):
     '''
 
     def __init__(self, k, dist_func = None):
-
         self.k = k
         if dist_func is None:
             self.dist_func = self.euclid_dist

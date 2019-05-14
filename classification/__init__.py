@@ -11,7 +11,6 @@ import numpy as np
 import logging
 from sklearn.base import BaseEstimator,ClassifierMixin
 
-logger = logging.getLogger(__name__)
 
 
 
@@ -22,6 +21,7 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
     '''
     基分类器，同时会有一些新的功能
     '''
+    logger = logging.getLogger(__name__)
 
     @staticmethod
     def to_array(data):
@@ -55,7 +55,7 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
             self.n_samples = len(self.X)
             self.n_features = 1
             self.X = self.X.reshape(self.n_samples, self.n_features)
-            logger.warning('X 可能是单变量，已经自动转置')
+            self.logger.warning('X 可能是单变量，已经自动转置')
         self._fit()
         return self
 
@@ -77,7 +77,7 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
                 self.n_test_samples = len(self.test_data)
                 self.n_test_features = 1
                 self.test_data = self.test_data.reshape(self.n_test_samples, self.n_test_features)
-                logger.warning('X 可能是单变量，已经自动转置')
+                self.logger.warning('X 可能是单变量，已经自动转置')
                 if self.n_features != self.n_test_features:
                     raise ValueError('测试数据特征数量与训练数据集不一致')
         self.test_result = self._predict()
@@ -85,11 +85,11 @@ class ClassifierEstimator(BaseEstimator,ClassifierMixin):
 
 
     def _fit(self):
-        logger.info('该对象还未配置_fit方法')
+        self.logger.info('该对象还未配置_fit方法')
 
 
     def _predict(self):
-        logger.info('该对象还未配置_predict方法')
+        self.logger.info('该对象还未配置_predict方法')
         self.test_result = None
 
 

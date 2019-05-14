@@ -1,22 +1,21 @@
 # -*- coding:utf-8 -*-
-#created_date: 2019-02-19
-#author: buxy
-'''
+# created_date: 2019-02-19
+# author: buxy
+"""
 数据预处理工具，包含一些对象或者是一些函数
 需要能够在 sklearn 中的 pipeline 内使用
-'''
-
+"""
 
 import numpy as np
 import logging
 from sklearn.base import BaseEstimator,TransformerMixin
 
 
-logger = logging.getLogger(__name__)
 
 
 class PreprocessTransformer(BaseEstimator,TransformerMixin):
     '''标准数据预处理用Transformer'''
+    logger = logging.getLogger(__name__)
 
     @staticmethod
     def to_array(data):
@@ -51,7 +50,7 @@ class PreprocessTransformer(BaseEstimator,TransformerMixin):
             self.n_samples = len(self.X)
             self.n_features = 1
             self.X = self.X.reshape(self.n_samples, self.n_features)
-            logger.warning('X 可能是单变量，已经自动转置')
+            self.logger.warning('X 可能是单变量，已经自动转置')
         self._fit()
         return self
 
@@ -73,7 +72,7 @@ class PreprocessTransformer(BaseEstimator,TransformerMixin):
                 self.n_transform_samples = len(self.transform_data)
                 self.n_transform_features = 1
                 self.transform_data = self.transform_data.reshape(self.n_transform_samples, self.n_transform_features)
-                logger.warning('X 可能是单变量，已经自动转置')
+                self.logger.warning('X 可能是单变量，已经自动转置')
                 if self.n_features != self.n_transform_features:
                     raise ValueError('数据特征数量与原数据集不一致')
 
@@ -87,19 +86,15 @@ class PreprocessTransformer(BaseEstimator,TransformerMixin):
 
 
     def _fit(self):
-        logger.info('该对象还未配置_fit方法')
+        self.logger.info('该对象还未配置_fit方法')
 
 
     def _transform(self):
-        logger.info('该对象还未配置_transform方法')
+        self.logger.info('该对象还未配置_transform方法')
         self.test_result = None
 
 
-
-
 from .min_max_norm import MinMaxNorm
-
-
 
 __all__ = [
     'PreprocessTransformer',
