@@ -60,15 +60,17 @@ class KNN(ClassifierEstimator):
         max_dist = max(distinces_copy)
 
         arg_list = []
-        for i in range(k):
+        i = 0
+        while i < k:
             temp_min_value = max_dist
             temp_min_index = -1
             for index, value in enumerate(distinces_copy):
                 if value <= temp_min_value:
-                    temp_min_value = value
                     temp_min_index = index
+                    temp_min_value = value
             arg_list.append(temp_min_index)
             distinces_copy[temp_min_index] = max_dist + 1
+            i = i + 1
         return arg_list
 
 
